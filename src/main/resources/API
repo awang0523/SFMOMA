@@ -1,0 +1,20 @@
+Add passenger
+curl -X POST 'localhost:8080/passenger?firstname=yiming&lastname=zhai&age=24&gender=male&phone=123'
+curl -X POST 'localhost:8080/passenger?firstname=yue&lastname=yin&age=24&gender=male&phone=456'
+curl -X POST 'localhost:8080/passenger?firstname=annan&lastname=wang&age=24&gender=male&phone=789'
+
+add reservation
+curl -X POST 'localhost:8080/reservation?passengerid=passenger1f0f5a89962347df9b6f0703c649d450'
+
+add flight
+curl -X POST 'localhost:8080/flight?flightnumber=0&price=120&origin=sf&destination=nyk&description=model&capacity=250&model=ana&manufacturer=boeing&year=1997'
+curl -X POST 'localhost:8080/flight?flightnumber=1&price=120&origin=sf&destination=nyk&description=model&capacity=250&model=ana&manufacturer=boeing&year=1997'
+
+get passenger
+curl -X GET 'localhost:8080/passenger/passenger1f0f5a89962347df9b6f0703c649d450'
+
+get reservation
+curl -X GET 'localhost:8080/reservation/reservation9d6e4d25cd6e449981811fe806011153'
+
+get flight
+curl -X GET 'localhost:8080/flight/0'
