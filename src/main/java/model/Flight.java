@@ -28,8 +28,8 @@ public class Flight {
     @Column(name = "ARRIVAL_TIME")
     private Calendar arrivalTime;
 
-    /*@Column(name = "SEAT_LEFT")
-    private int seatsLeft;*/
+    @Column(name = "SEAT_LEFT")
+    private int seatsLeft;
 
     @Column(name = "DESCRIPTION")
     private String description;
@@ -114,7 +114,7 @@ public class Flight {
     }
     */
 
-    /*
+    @JsonView(Views.Public.class)
     public int getSeatsLeft() {
         return seatsLeft;
     }
@@ -122,7 +122,7 @@ public class Flight {
     public void setSeatsLeft(int seatsLeft) {
         this.seatsLeft = seatsLeft;
     }
-    */
+
 
     @JsonView(Views.Public.class)
     public String getDescription() {

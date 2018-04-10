@@ -34,14 +34,14 @@ public class MainController {
     @JsonView(Views.Private1.class)
     @GetMapping(path = "/passenger/{passengerid}")
     public @ResponseBody
-    Passenger getPassenger(@PathVariable("passengerid") String passengerid) {
-        Passenger passenger = passengerRepository.findPassengerByPassengerId(passengerid);
+    Passenger getPassenger(@PathVariable("passengerid") String id) {
+        Passenger passenger = passengerRepository.findPassengerByPassengerId(id);
         if (passenger == null) {
             throw new NotFoundException(
-                    "Sorry, the requested passenger with id " + passengerid + " does not exist" );
+                    "Sorry, the requested passenger with id " + id + " does not exist" );
         }
         else {
-            return passengerRepository.findPassengerByPassengerId(passengerid);
+            return passengerRepository.findPassengerByPassengerId(id);
         }
     }
 
@@ -99,7 +99,7 @@ public class MainController {
         }
         else {
             passengerRepository.deletePassengerByPassengerId(passengerid);
-            return "Good";
+            return "Delete Successfully.";
         }
     }
 
@@ -108,25 +108,25 @@ public class MainController {
     // Map reservation
     @JsonView(Views.Private2.class)
     @GetMapping(path = "/reservation/{reservationnum}")
-    public @ResponseBody Optional<Reservation> getReservation(@PathVariable("reservationnum") String reservationnum) {
+    public @ResponseBody Optional<Reservation> getReservation(@PathVariable("reservationnum") String number) {
 
-        Optional<Reservation> reservation = reservationRepository.findById(reservationnum);
+        Optional<Reservation> reservation = reservationRepository.findById(number);
         if (!reservation.isPresent()) {
             throw new NotFoundException(
-                    "Reserveration with number " + reservationnum + " does not exist");
+                    "Reserveration with number " + number + " does not exist");
         }
         else {
-            return reservationRepository.findById(reservationnum);
+            return reservationRepository.findById(number);
         }
     }
 
     @PostMapping(path = "/reservation")
     public @ResponseBody Optional<Reservation> addReservation(
-            @RequestParam String passengerid
+            @RequestParam String passengerId
             , @RequestParam String flightLists
     ) {
         Reservation reservation = new Reservation();
-        Passenger passenger = passengerRepository.findPassengerByPassengerId(passengerid);
+        Passenger passenger = passengerRepository.findPassengerByPassengerId(passengerId);
         reservation.setPassenger(passenger);
         List<Flight> flights = reservation.getFlights();
         double totalPrice = 0.0;
@@ -149,7 +149,7 @@ public class MainController {
         FliToPas fliToPas = new FliToPas();
         for (int i = 0; i < flightLists1.length; i++) {
             fliToPas.setFlightNumber(flightLists1[i]);
-            fliToPas.setPassengerId(passengerid);
+            fliToPas.setPassengerId(passengerId);
         }
         fliToPasRepository.save(fliToPas);
         return reservationRepository.findById(reservation.getReservationNumber());
@@ -158,13 +158,50 @@ public class MainController {
 
     // Update reservation
     @PutMapping(path = "/reservation/{reservationnum}")
-    //public @ResponseBody
+    public @ResponseBody Optional<Reservation> updateReservation(
+            @PathVariable("reservationnum") String number
+            , @RequestParam String flightAdded
+            , @RequestParam String flightRemoved) {
+        Reservation reservation = reservationRepository.findReservationByReservationNumber(number);
+
+        List<Flight> flights = reservation.getFlights();
+        ResToFli resToFli = new ResToFli();
+
+        String[] removedFlights = flightRemoved.split(",");
+        String[] addedFlights = flightAdded.split(",");
+
+        for (int i = 0; i < removedFlights.length; i++) {
+            resToFliRepository.deleteResToFliByFlightNumber(removedFlights[i]);
+
+        }
+
+        for (int i = 0; i< addedFlights.length; i++) {
+            resToFli.setReservationNumber(number);
+            resToFli.setFlightNumber(addedFlights[i]);
+        }
+
+        resToFliRepository.save(resToFli);
+
+
+        return reservationRepository.findById(number);
+
+    }
 
     // search reservation
-    //@GetMapping
+    // @GetMapping
 
     // Delete reservation
-    @DeleteMapping
+    @DeleteMapping(path = "/reservation/{reservationnum}")
+    public @ResponseBody String deleteReservation(@PathVariable("reservationnum") String reservationnum) {
+        Optional<Reservation> reservation = reservationRepository.findById(reservationnum);
+        if (!reservation.isPresent()) {
+            throw new NotFoundException(reservationnum);
+        }
+        else {
+            flightRepository.deleteById(reservationnum);
+            return "Delete Successfully.";
+        }
+    }
 
 
 
@@ -297,7 +334,7 @@ public class MainController {
         }
         else {
             flightRepository.deleteById(flightnum);
-            return "good";
+            return "Delete Successfully.";
         }
     }
 

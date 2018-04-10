@@ -39,7 +39,7 @@ public class Reservation {
     }
 
     @JsonView(Views.Public.class)
-    public double getPrice() {
+    public double getPrice(String reservationNumber) {
         return price;
     }
 
