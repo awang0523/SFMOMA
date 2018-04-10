@@ -4,17 +4,35 @@ curl -X POST 'localhost:8080/passenger?firstname=yue&lastname=yin&age=24&gender=
 curl -X POST 'localhost:8080/passenger?firstname=annan&lastname=wang&age=24&gender=male&phone=789'
 
 add reservation
-curl -X POST 'localhost:8080/reservation?passengerid=passenger1f0f5a89962347df9b6f0703c649d450'
+curl -X POST 'localhost:8080/reservation?passengerid=passenger1f0f5a89962347df9b6f0703c649d450&flightlists'
 
 add flight
-curl -X POST 'localhost:8080/flight?flightnumber=0&price=120&origin=sf&destination=nyk&description=model&capacity=250&model=ana&manufacturer=boeing&year=1997'
-curl -X POST 'localhost:8080/flight?flightnumber=1&price=120&origin=sf&destination=nyk&description=model&capacity=250&model=ana&manufacturer=boeing&year=1997'
+curl -X POST 'localhost:8080/flight/ch189?price=120&origin=sf&destination=la&departuretime=2018010508&arrivaltime=2018010511&description=new&capacity=100&model=787&manufacturer=boeing&year=1997'
+
 
 get passenger
-curl -X GET 'localhost:8080/passenger/passenger1f0f5a89962347df9b6f0703c649d450'
+curl -X GET 'localhost:8080/passenger/passengerfd0ee8adc0ad4dac8a810d11921c6907'
 
 get reservation
 curl -X GET 'localhost:8080/reservation/reservation9d6e4d25cd6e449981811fe806011153'
 
 get flight
 curl -X GET 'localhost:8080/flight/0'
+
+update passenger
+curl -X PUT 'localhost:8080/passenger/passenger1f0f5a89962347df9b6f0703c649d450'
+
+update reservation
+curl -X PUT 'localhost:8080/reservation/reservation9d6e4d25cd6e449981811fe806011153'
+
+update flight
+curl -X PUT 'localhost:8080/flight/0'
+
+delete passenger
+curl -X DELETE 'localhost:8080/passenger/passenger1f0f5a89962347df9b6f0703c649d450'
+
+delete reservation
+curl -X DELETE 'localhost:8080/reservation/reservation9d6e4d25cd6e449981811fe806011153'
+
+delete flight
+curl -X DELETE 'localhost:8080/flight/0'
